@@ -125,6 +125,13 @@ function checkAnswer(answer) {
         lives--;
         updateLives();
         document.getElementById('cover-lose').style.display = 'flex';
+        let displayAnswer = currentImage.category === 'No_Effusion' ? 'No Effusion' : currentImage.category;
+        document.getElementById('cover-lose').innerHTML = `
+        <div>
+            <img src="img/incorrect.png" alt="Incorrect">
+            <p>Correct answer: ${displayAnswer}</p>
+        </div>
+    `;
     }
 
     if (lives > 0) {
