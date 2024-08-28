@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otoscopy Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="menu">
+        <div class="menu-content">
+            <img src="img/logo.png" class="logo">
+            <h1>Otoscopy Game</h1>
+            <button id="start-button">Start</button>
+            <button id="info-button">Info</button>
+            <button id="dx-button">Dx</button>
+        </div>
+    </div>
+
+    <div id="info-screen" class="info-screen" style="display: none;">
+        <div class="info-screenbox">
+        <h2>Game Info</h2>
+        <p>Coded by Dr Jeremy Steinberg 2024</p>
+        <p>Inspired by now apparently unavailable game by Adam Handen from University of Pittsburgh School of Medicine</p>
+        <p>Images are courtesy of <a href="https://www.pediatrics.wisc.edu/education/acute-otitis-media/exercises/images/">David P. McCormick</a></p>
+        <button id="back-button">Back</button>
+        </div>
+    </div>
+
+    <div id="dx-screen" class="dx-screen" style="display: none;">
+        <div class="dx-screenbox">
+        <h2>Diagnostic Criteria</h2><br>
+        <h3><u>Diagnostic Criteria for AOM</u></h3>
+        <ul>
+            <li>Moderate to severe bulging of tympanic membrane</li>
+            <li>New onset of otorrhea not new to acute otitis externa</li>
+            <li>Mild bulging ( full) AND recent ( less than 48 hours-acute) onset of ear pain</li>
+            <li>Mild bulging and intense erythema </li>     
+        </ul>
+        <br>
+        <h3><u>Diagnostic Criteria for OME</u></h3>
+        <p>Otitis Media with Effusion (OME) is the condition of fluid present in the middle ear. Inflammation may be associated with OME. The spectrum of tympanic membrane findings can be challenging for one to appreciate the subtle differences in the progression from MEE and OME to AOM</p>
+        <p>Visualization of the tympanic membrane is critical to differentiate between AOM and OME. “A middle ear effusion may be present after resolution of an episode of AOM, or it may develop because of a viral upper respiratory tract infection that produces eustachian tube dysfunction. In both of these settings, the middle ear effusion is not an infectious process and will not benefit from antibiotic therapy.</p>
+        <p>Diagnostic criteria courtesy of <a href="https://www.pediatrics.wisc.edu/education/acute-otitis-media/exercises/images/">American Academy of Paediatrics 2013 Guidelines</a></p>
+        <button id="back2-button">Back</button>
+        </div>
+    </div>
+
+    <div id="game-container" style="display: none;">
+        <div id="top-bar">
+            <div class="container">
+                <span id="lives">Lives: 
+                    <img src="img/life.png" alt="Life" class="life-icon">
+                    <img src="img/life.png" alt="Life" class="life-icon">
+                    <img src="img/life.png" alt="Life" class="life-icon">
+                    <img src="img/life.png" alt="Life" class="life-icon">
+                    <img src="img/life.png" alt="Life" class="life-icon">
+                </span>
+                <span id="score">Score: 0</span>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="game-area">
+                <div id="timer">Time: 30</div>
+                <div id="image"></div>
+                <div id="buttons">
+                    <button class="game-button" onclick="checkAnswer('AOM')"><u>A</u>OM</button>
+                    <button class="game-button" onclick="checkAnswer('OME')"><u>O</u>ME</button>
+                    <button class="game-button" onclick="checkAnswer('No_Effusion')"><u>N</u>o Effusion</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="cover" class="cover">
+            <div>Loading...</div>
+        </div>
+
+        <div id="cover-win" class="cover" style="display: none;">
+            <div>
+                <img src="img/correct.png" alt="Correct">
+            </div>
+        </div>
+
+        <div id="cover-lose" class="cover" style="display: none;">
+            <div>
+                <img src="img/incorrect.png" alt="Incorrect">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
