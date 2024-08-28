@@ -4,6 +4,7 @@ let lives = 5;
 let timeLeft = 10;
 let timerInterval;
 let currentImage;
+let isMinimalist = false;
 let images = {
     AOM: [],
     OME: [],
@@ -18,6 +19,9 @@ function initGame() {
     document.getElementById('back-button').addEventListener('click', showMenu);
     document.getElementById('back2-button').addEventListener('click', showMenu);
     document.getElementById('dx-button').addEventListener('click', showDx);
+    document.getElementById('toggle-minimalist').addEventListener('click', toggleMinimalistDesign);
+
+    loadMinimalistState();
 
     // Load image paths from images.json
     fetch('images.json')
@@ -41,6 +45,36 @@ function initGame() {
         .catch(error => {
             console.error('Error loading images.json:', error);
         });
+}
+
+// Toggle minimalist design
+function toggleMinimalistDesign() {
+    isMinimalist = !isMinimalist;
+    updateMinimalistDesign();
+    saveMinimalistState();
+}
+
+// Update the design based on the minimalist state
+function updateMinimalistDesign() {
+    if (isMinimalist) {
+        document.body.classList.add('minimalist');
+    } else {
+        document.body.classList.remove('minimalist');
+    }
+}
+
+// Save the minimalist state to localStorage
+function saveMinimalistState() {
+    localStorage.setItem('isMinimalist', JSON.stringify(isMinimalist));
+}
+
+// Load the minimalist state from localStorage
+function loadMinimalistState() {
+    const savedState = localStorage.getItem('isMinimalist');
+    if (savedState !== null) {
+        isMinimalist = JSON.parse(savedState);
+        updateMinimalistDesign();
+    }
 }
 
 // Show the menu

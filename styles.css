@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 body {
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Press Start 2P', cursive!important;
     margin: 0;
     padding: 0;
     background-color: #000;
@@ -48,6 +48,7 @@ body {
     color: #32cd32;
     text-shadow: 4px 4px 0px #228b22;
     margin-bottom: 40px;
+    font-family: 'Press Start 2P', cursive !important;
 }
 
 #menu button, #info-screen button, #dx-screen button {
@@ -64,7 +65,7 @@ body {
     font-family: 'Press Start 2P', cursive;
     border: 4px solid #228b22;
     box-shadow: 4px 4px 0px #228b22;
-    width: 200px;
+    width: 250px;
 }
 
 #menu button:hover, #info-screen button:hover {
@@ -93,6 +94,7 @@ body {
 
 .dx-screenbox{
     padding:50px 30px;
+    background-color: black;
 }
 
 .info-screenbox p a, .dx-screenbox p a{
@@ -104,6 +106,12 @@ body {
     color: #00ffff;
     text-shadow: 4px 4px 0px #008b8b;
     margin-bottom: 20px;
+    font-family: 'Press Start 2P', cursive !important;
+}
+
+.dx-screenbox h3 {
+   font-family: 'Press Start 2P', cursive !important;
+   color:white!important;
 }
 
 #info-screen p {
@@ -256,6 +264,10 @@ footer {
     max-width: 150px;
 }
 
+#game-container{
+   background-color: black;
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 10px;
@@ -303,4 +315,86 @@ footer {
     #info-screen p, #dx-screen p, #dx-screen ul {
         font-size: 12px;
     }
+}
+
+
+/* Existing styles remain the same */
+
+/* Minimalist Design Styles */
+body.minimalist {
+    font-family: Arial, sans-serif!important;
+    background-color: #ffffff!important;
+    color: #000000!important;
+}
+
+.minimalist #menu,
+.minimalist #info-screen,
+.minimalist .info-screenbox,
+.minimalist #dx-screen,
+.minimalist #game-container,
+.minimalist .dx-screenbox {
+    background-color: #ffffff!important;
+    color:black!important;
+}
+
+.minimalist .dx-screenbox h2, .minimalist .dx-screenbox h3,.minimalist .dx-screenbox a,
+.minimalist .info-screenbox h2, .minimalist .info-screenbox h3,.minimalist .info-screenbox a {
+   color: black!important;
+   font-family: Arial, sans-serif!important;
+}
+
+.minimalist #menu h1,
+.minimalist #info-screen h2,
+.minimalist #dx-screen h2 {
+    color: #000000!important;
+    text-shadow: none!important;
+}
+
+.minimalist #menu button,
+.minimalist #info-screen button,
+.minimalist #dx-screen button,
+.minimalist .game-button {
+    background-color: #f0f0f0!important;
+    color: #000000!important;
+    border: 1px solid #000000;
+    box-shadow: none;
+    font-family: Arial, sans-serif!important;
+    font-size:30px;
+}
+
+.minimalist #menu button:hover,
+.minimalist #info-screen button:hover,
+.minimalist #dx-screen button:hover,
+.minimalist .game-button:hover {
+    background-color: #e0e0e0!important;
+}
+
+.minimalist #top-bar {
+    background-color: #f0f0f0;
+    color: #000000;
+    border-bottom: 1px solid #000000;
+}
+
+.minimalist #game-area {
+    border: 1px solid #000000;
+}
+
+.minimalist #image {
+    background-color: black;
+    border: 1px solid #000000;
+}
+
+.minimalist #timer {
+    color: #fff!important;
+}
+
+.minimalist .cover {
+    background-color: rgba(255,255,255,0.9);
+    color: #000000;
+}
+
+.minimalist footer {
+    background-color: #f0f0f0;
+    color: #000000;
+    border-top: 1px solid #000000;
 }
