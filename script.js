@@ -5,6 +5,7 @@ let timeLeft = 10;
 let timerInterval;
 let currentImage;
 let isMinimalist = false;
+let isFellowMode = false;
 let images = {
     AOM: [],
     OME: [],
@@ -18,10 +19,13 @@ function initGame() {
     document.getElementById('info-button').addEventListener('click', showInfo);
     document.getElementById('back-button').addEventListener('click', showMenu);
     document.getElementById('back2-button').addEventListener('click', showMenu);
+    document.getElementById('back3-button').addEventListener('click', showMenu);
     document.getElementById('dx-button').addEventListener('click', showDx);
     document.getElementById('toggle-minimalist').addEventListener('click', toggleMinimalistDesign);
+    document.getElementById('toggle-fellow').addEventListener('change', toggleFellowMode);
 
     loadMinimalistState();
+    loadFellowModeState();
 
     // Load image paths from images.json
     fetch('images.json')
@@ -77,6 +81,48 @@ function loadMinimalistState() {
     }
 }
 
+// Toggle fellow mode
+function toggleFellowMode() {
+    isFellowMode = document.getElementById('toggle-fellow').checked;
+    updateFellowMode();
+    saveFellowModeState();
+}
+
+
+// Update the game based on the fellow mode state
+function updateFellowMode() {
+    if (isFellowMode) {
+        document.body.classList.add('fellow-mode');
+        document.getElementById('fellow-mode-text').textContent = 'Fellow Mode';
+        document.getElementById('image').style.width = "20%";
+        document.getElementById('image').style.backgroundColor = "black"; 
+        document.getElementById('image').style.border = "black";      
+ 
+    } else {
+        document.body.classList.remove('fellow-mode');
+        document.getElementById('fellow-mode-text').textContent = 'GPEP Mode';
+        document.getElementById('image').style.width = "100%";
+        document.getElementById('image').style.backgroundColor = "#008080"; 
+        document.getElementById('image').style.border = "4px solid #00ffff";  
+
+    }
+}
+
+// Save the fellow mode state to localStorage
+function saveFellowModeState() {
+    localStorage.setItem('isFellowMode', JSON.stringify(isFellowMode));
+}
+
+// Load the fellow mode state from localStorage
+function loadFellowModeState() {
+    const savedState = localStorage.getItem('isFellowMode');
+    if (savedState !== null) {
+        isFellowMode = JSON.parse(savedState);
+        document.getElementById('toggle-fellow').checked = isFellowMode;
+        updateFellowMode();
+    }
+}
+
 // Show the menu
 function showMenu() {
     document.getElementById('menu').style.display = 'flex';
@@ -114,7 +160,7 @@ function startGame() {
 function startNewRound() {
     // Reset timer
     clearInterval(timerInterval);
-    timeLeft = 10;
+    timeLeft = isFellowMode ? 6 : 10; // Reduce time for fellow mode
     updateTimer();
 
     // Choose a random image
@@ -151,10 +197,30 @@ function updateTimer() {
 // Check the answer
 function checkAnswer(answer) {
     clearInterval(timerInterval);
-    if (answer === currentImage.category) {
-        score += 10;
+
+    if (answer === 'timeout') {
+        lives--;
+        updateLives();
+        document.getElementById('cover-lose').style.display = 'flex';
+        let displayAnswer = currentImage.category === 'No_Effusion' ? 'No Effusion' : currentImage.category;
+        document.getElementById('cover-lose').innerHTML = `
+        <div>
+            <img src="img/incorrect.png" alt="Incorrect">
+            <p>Too slow, patient moved!<br><br> Correct answer: ${displayAnswer}</p>
+        </div>
+    `;
+    } else if (answer === currentImage.category) {
+        let pointsAwarded = isFellowMode ? Math.min(timeLeft, 5) : 10;
+        score += pointsAwarded;
         document.getElementById('score').textContent = `Score: ${score}`;
         document.getElementById('cover-win').style.display = 'flex';
+        document.getElementById('cover-win').innerHTML = `
+        <div>
+            Ka Pai!<br>
+            <img src="img/correct.png" alt="Correct">
+            <p>+${pointsAwarded} points</p>
+        </div>
+    `;
     } else {
         lives--;
         updateLives();
@@ -169,7 +235,7 @@ function checkAnswer(answer) {
     }
 
     if (lives > 0) {
-        setTimeout(startNewRound, 2000);
+        setTimeout(startNewRound, isFellowMode ? 1500 : 2000); // Reduce delay for fellow mode
     } else {
         endGame();
     }
@@ -222,7 +288,7 @@ function endGame() {
 // Reset the game
 function resetGame() {
     score = 0;
-    lives = 5;
+    lives = isFellowMode ? 3 : 5; // Reduce lives for fellow mode
     document.getElementById('score').textContent = 'Score: 0';
     updateLives();
     startNewRound();

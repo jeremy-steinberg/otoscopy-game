@@ -15,12 +15,20 @@
             <button id="info-button">Info</button>
             <button id="dx-button">Dx</button>
             <button id="toggle-minimalist">Minimalist</button>
+            <label class="switch">
+              <input type="checkbox" id="toggle-fellow">
+              <span class="slider round"></span>
+            </label>
+            <span id="fellow-mode-text">GPEP Mode</span>
         </div>
     </div>
 
     <div id="info-screen" class="info-screen" style="display: none;">
         <div class="info-screenbox">
         <h2>Game Info</h2>
+        <p><u>GPEP Mode:</u> Lose a life if you get it wrong or take longer than 10 seconds. 5 lives. 10 points for each correct answer.</p>
+        <p><u>Fellow Mode:</u>Lose a life if you get it wrong or take longer than 6 seconds. 3 lives. Maximum 5 points for each correct answer, 1 point less for every extra second taken. Images are smaller.</p>
+        <h2>Credits</h2>
         <p>Coded by Dr Jeremy Steinberg 2024</p>
         <p>Inspired by now apparently unavailable game by Adam Handen from University of Pittsburgh School of Medicine</p>
         <p>Images are courtesy of <a href="https://www.pediatrics.wisc.edu/education/acute-otitis-media/exercises/images/">David P. McCormick</a></p>
@@ -41,7 +49,7 @@
         <br>
         <h3><u>Diagnostic Criteria for OME</u></h3>
         <p>Otitis Media with Effusion (OME) is the condition of fluid present in the middle ear. Inflammation may be associated with OME. The spectrum of tympanic membrane findings can be challenging for one to appreciate the subtle differences in the progression from MEE and OME to AOM</p>
-        <p>Visualization of the tympanic membrane is critical to differentiate between AOM and OME. “A middle ear effusion may be present after resolution of an episode of AOM, or it may develop because of a viral upper respiratory tract infection that produces eustachian tube dysfunction. In both of these settings, the middle ear effusion is not an infectious process and will not benefit from antibiotic therapy.</p>
+        <p>Visualization of the tympanic membrane is critical to differentiate between AOM and OME. A middle ear effusion may be present after resolution of an episode of AOM, or it may develop because of a viral upper respiratory tract infection that produces eustachian tube dysfunction. In both of these settings, the middle ear effusion is not an infectious process and will not benefit from antibiotic therapy.</p>
         <p>Diagnostic criteria courtesy of <a href="https://www.pediatrics.wisc.edu/education/acute-otitis-media/exercises/images/">American Academy of Paediatrics 2013 Guidelines</a></p>
         <button id="back2-button">Back</button>
         </div>
@@ -62,8 +70,12 @@
         </div>
 
         <div class="container">
+            
             <div id="game-area">
-                <div id="timer">Time: 30</div>
+                <div class="timer-container">
+                    <div id="timer">Time: 30</div>
+                    <button id="back3-button">X</button>
+                </div>                
                 <div id="image"></div>
                 <div id="buttons">
                     <button class="game-button" onclick="checkAnswer('AOM')"><u>A</u>OM</button>
@@ -71,6 +83,9 @@
                     <button class="game-button" onclick="checkAnswer('No_Effusion')"><u>N</u>o Effusion</button>
                 </div>
             </div>
+            
+
+
         </div>
 
         <div id="cover" class="cover">
