@@ -113,6 +113,9 @@ function loadFellowModeState() {
     if (savedState !== null) {
         isFellowMode = JSON.parse(savedState);
         document.getElementById('toggle-fellow').checked = isFellowMode;
+        isFellowMode = document.getElementById('toggle-fellow').checked;
+        let fellowModeText = document.getElementById('fellow-mode-text');
+        fellowModeText.textContent = isFellowMode ? "Fellow Mode Enabled" : "GPEP Mode Enabled";
         updateFellowMode();
     }
 }
