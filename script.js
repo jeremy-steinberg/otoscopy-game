@@ -84,29 +84,23 @@ function loadMinimalistState() {
 // Toggle fellow mode
 function toggleFellowMode() {
     isFellowMode = document.getElementById('toggle-fellow').checked;
+    let fellowModeText = document.getElementById('fellow-mode-text');
+    fellowModeText.textContent = isFellowMode ? "Fellow Mode Enabled" : "GPEP Mode Enabled";
     updateFellowMode();
     saveFellowModeState();
 }
+
 
 
 // Update the game based on the fellow mode state
 function updateFellowMode() {
     if (isFellowMode) {
         document.body.classList.add('fellow-mode');
-        document.getElementById('fellow-mode-text').textContent = 'Fellow Mode';
-        document.getElementById('image').style.width = "20%";
-        document.getElementById('image').style.backgroundColor = "black"; 
-        document.getElementById('image').style.border = "black";      
- 
     } else {
         document.body.classList.remove('fellow-mode');
-        document.getElementById('fellow-mode-text').textContent = 'GPEP Mode';
-        document.getElementById('image').style.width = "100%";
-        document.getElementById('image').style.backgroundColor = "#008080"; 
-        document.getElementById('image').style.border = "4px solid #00ffff";  
-
     }
 }
+
 
 // Save the fellow mode state to localStorage
 function saveFellowModeState() {
@@ -173,8 +167,49 @@ function startNewRound() {
         src: images[randomCategory][randomIndex].src
     };
 
-    // Display the image
-    document.getElementById('image').innerHTML = `<img src="${currentImage.src}" alt="Otoscopy Image">`;
+    // Determine blur factor and wax display if isFellowMode is true
+    let blurStyle = "";
+    let waxOverlays = "";
+    let imageContainerClass = isFellowMode ? "fellow-mode-image" : "gpep-mode-image";
+    
+    if (isFellowMode) {
+        // Apply random blur
+        let randomBlur = Math.random() * 2; // Random blur between 0 and 2px
+        blurStyle = `filter: blur(${randomBlur}px);`;
+
+        // Determine whether to show wax
+        let showWax = Math.random() < 1; // 100% chance to show wax
+        if (showWax) {
+            let waxCount = Math.floor(Math.random() * 4) + 3; // Random number of wax pieces (3 to 7)
+            for (let i = 0; i < waxCount; i++) {
+                let waxImage = Math.random() < 0.5 ? 'img/wax1.png' : 'img/wax2.png';
+                let randomRotation = Math.random() * 360; // Random rotation between 0 and 360 degrees
+                let waxSize = Math.random() * 75 + 25; // Random size for wax overlay (25 to 100 pixels)
+                let randomTop = Math.random() * 80 + 10; // Random top position (10% to 90%)
+                let randomLeft = Math.random() * 80 + 10; // Random left position (10% to 90%)
+                let randomOpacity = Math.random() * 0.3 + 0.7; // Random opacity between 0.7 and 1
+                let randomBlurWax = Math.floor(Math.random() * 1) + 1; // Random blur between 0.5 and 1
+                waxOverlays += `<img src="${waxImage}" class="wax-overlay" style="top: ${randomTop}%; left: ${randomLeft}%; width: ${waxSize}px; height: ${waxSize}px; transform: rotate(${randomRotation}deg); filter: blur(${randomBlurWax}px); opacity: ${randomOpacity};">`;            
+            }
+        }
+    }
+
+    // Display the image with or without blur and with wax overlays (if applicable)
+    document.getElementById('image').innerHTML = `
+        <div class="image-container ${imageContainerClass}" style="position: relative; display: overflow: hidden;">
+            <img src="${currentImage.src}" alt="Otoscopy Image" style="${blurStyle}">
+            ${waxOverlays}
+        </div>
+    `;
+
+    // Start wiggle effect after the image container is in the DOM
+    if (isFellowMode) {
+        // Randomly decide whether to apply the wiggle effect
+        let shouldWiggle = Math.random() < 0.33; // 40% chance to wiggle
+        if (shouldWiggle) {
+            startWiggleEffect();
+        }
+    }
 
     // Start the timer
     timerInterval = setInterval(updateTimer, 1000);
@@ -184,6 +219,22 @@ function startNewRound() {
     document.getElementById('cover-win').style.display = 'none';
     document.getElementById('cover-lose').style.display = 'none';
 }
+
+function startWiggleEffect() {
+    const imageContainer = document.querySelector('.image-container');
+    let wiggleInterval = setInterval(() => {
+        let randomX = Math.random() * 4 - 2; // Random value between -2 and 2
+        let randomY = Math.random() * 4 - 2; // Random value between -2 and 2
+        imageContainer.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    }, 100); // Wiggle every 100ms
+
+    setTimeout(() => {
+        clearInterval(wiggleInterval);
+        imageContainer.style.transform = 'translate(0, 0)'; // Reset position
+    }, timeLeft * 1000); // Stop wiggle effect when time runs out
+}
+
+
 
 // Update the timer
 function updateTimer() {
