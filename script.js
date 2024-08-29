@@ -149,6 +149,7 @@ function showDx() {
 
 // Start the game
 function startGame() {
+    lives = isFellowMode ? 3 : 5;
     document.getElementById('menu').style.display = 'none';
     document.getElementById('info-screen').style.display = 'none';
     document.getElementById('dx-screen').style.display = 'none';
