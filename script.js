@@ -4,6 +4,7 @@ let lives = 5;
 let timeLeft = 10;
 let timerInterval;
 let currentImage;
+let audio;
 let isMinimalist = false;
 let isFellowMode = false;
 let images = {
@@ -126,6 +127,7 @@ function showMenu() {
     document.getElementById('info-screen').style.display = 'none';
     document.getElementById('dx-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'none';
+    stopAudio();
 }
 
 // Show the info screen
@@ -176,6 +178,7 @@ function startNewRound() {
     let imageContainerClass = isFellowMode ? "fellow-mode-image" : "gpep-mode-image";
     
     if (isFellowMode) {
+
         // Apply random blur
         let randomBlur = Math.random() * 2; // Random blur between 0 and 2px
         blurStyle = `filter: blur(${randomBlur}px);`;
@@ -208,9 +211,13 @@ function startNewRound() {
     // Start wiggle effect after the image container is in the DOM
     if (isFellowMode) {
         // Randomly decide whether to apply the wiggle effect
-        let shouldWiggle = Math.random() < 0.33; // 40% chance to wiggle
+        let shouldWiggle = Math.random() < 0.33; // 33% chance to wiggle
         if (shouldWiggle) {
             startWiggleEffect();
+            // Play crying sound
+            let randomCryingSound = Math.floor(Math.random() * 6) + 1;
+            audio = new Audio(`audio/crying${randomCryingSound}.mp3`);
+            audio.play();
         }
     }
 
@@ -237,6 +244,12 @@ function startWiggleEffect() {
     }, timeLeft * 1000); // Stop wiggle effect when time runs out
 }
 
+function stopAudio() {
+    if (audio && !audio.paused) {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+}
 
 
 // Update the timer
@@ -252,6 +265,7 @@ function updateTimer() {
 // Check the answer
 function checkAnswer(answer) {
     clearInterval(timerInterval);
+    stopAudio();
 
     if (answer === 'timeout') {
         lives--;
@@ -318,6 +332,7 @@ function handleKeyPress(event) {
             checkAnswer('No_Effusion');
             break;
     }
+    stopAudio(); 
 }
 
 // End the game

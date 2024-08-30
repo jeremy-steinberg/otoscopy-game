@@ -4,7 +4,7 @@ body {
     font-family: 'Press Start 2P', cursive!important;
     margin: 0;
     padding: 0;
-    background-color: #000;
+    background-color: #000!important;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -140,7 +140,6 @@ body {
 
 #image {
     width: 100%;
-    height: 300px;
     background-color: #008080;
     display: flex;
     align-items: center;
@@ -366,6 +365,10 @@ footer {
     #info-screen p, #dx-screen p, #dx-screen ul {
         font-size: 12px;
     }
+    #info-screen{
+        justify-content:flex-start;
+        height: 100%;
+    }
 }
 
 
@@ -411,12 +414,13 @@ body.fellow-mode #image {
     width: 25%;
     background-color: black;
     border: 4px solid black;
+    margin: 80px auto;
 
 }
 
 .gpep-mode-image {
     width: 100%;
-    height: 100%;
+    height: 300px;
 }
 
 body:not(.fellow-mode) #fellow-mode-text {
