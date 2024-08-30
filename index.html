@@ -27,7 +27,8 @@
         <div class="info-screenbox">
         <h2>Game Info</h2>
         <p><u>GPEP Mode:</u> Lose a life if you get it wrong or take longer than 10 seconds. 5 lives. 10 points for each correct answer.</p>
-        <p><u>Fellow Mode:</u>Lose a life if you get it wrong or take longer than 6 seconds. 3 lives. Maximum 5 points for each correct answer, 1 point less for every extra second taken. Images are smaller with random blur factor, random amount of wax obstruction, and chance of wiggle/moan/cry</p>
+        <p><u>Fellow Mode:</u> Lose a life if you get it wrong or take longer than 6 seconds. 3 lives. Maximum 5 points for each correct answer, 1 point less for every extra second taken. Images are smaller with random blur factor, random amount of wax obstruction, and chance of wiggle/moan/cry. You can clear the wax three times per game.</p>
+        <p><u>Keyboard Shortcuts:</u> A: AOM, O: OME, N: No Effusion, E: Extract Wax </p>
         <p>If on desktop you can use keyboard shortcuts. A for AOM, O for OME, N for No Effusion</p>
         <h2>Credits</h2>
         <p>Coded by Dr Jeremy Steinberg 2024</p>
@@ -81,6 +82,7 @@
             
             <div id="game-area">
                 <div class="timer-container">
+                    
                     <div id="timer">Time: 30</div>
                     <button id="back3-button">X</button>
                 </div>                
@@ -90,8 +92,13 @@
                     <button class="game-button" onclick="checkAnswer('OME')"><u>O</u>ME</button>
                     <button class="game-button" onclick="checkAnswer('No_Effusion')"><u>N</u>o Effusion</button>
                 </div>
+                
             </div>
-            
+            <br>
+            <div id="wax-section">
+                <button id="wax-button" style="display: none;"><u>E</u>xtract Wax</button>
+                <div id="wax-tools" style="display: none;"></div>
+            </div>
 
 
         </div>

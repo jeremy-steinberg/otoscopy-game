@@ -7,6 +7,7 @@ let currentImage;
 let audio;
 let isMinimalist = false;
 let isFellowMode = false;
+let waxExtractionTools = 3;
 let images = {
     AOM: [],
     OME: [],
@@ -24,6 +25,7 @@ function initGame() {
     document.getElementById('dx-button').addEventListener('click', showDx);
     document.getElementById('toggle-minimalist').addEventListener('click', toggleMinimalistDesign);
     document.getElementById('toggle-fellow').addEventListener('change', toggleFellowMode);
+    document.getElementById('wax-button').addEventListener('click', extractWax);
 
     loadMinimalistState();
     loadFellowModeState();
@@ -149,10 +151,13 @@ function showDx() {
 // Start the game
 function startGame() {
     lives = isFellowMode ? 3 : 5;
+    document.getElementById('wax-button').style.display = isFellowMode ? 'block' : 'none';
+    waxExtractionTools = isFellowMode ? 3 : 0; // Reset wax extraction tools
     document.getElementById('menu').style.display = 'none';
     document.getElementById('info-screen').style.display = 'none';
     document.getElementById('dx-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
+    updateWaxToolsDisplay(); // New function call
     resetGame();
 }
 
@@ -178,7 +183,7 @@ function startNewRound() {
     let imageContainerClass = isFellowMode ? "fellow-mode-image" : "gpep-mode-image";
     
     if (isFellowMode) {
-
+        
         // Apply random blur
         let randomBlur = Math.random() * 2; // Random blur between 0 and 2px
         blurStyle = `filter: blur(${randomBlur}px);`;
@@ -221,6 +226,14 @@ function startNewRound() {
         }
     }
 
+    // Display the image with or without blur and with wax overlays (if applicable)
+    document.getElementById('image').innerHTML = `
+        <div class="image-container ${imageContainerClass}" style="position: relative; overflow: hidden;">
+            <img src="${currentImage.src}" alt="Otoscopy Image" style="${blurStyle}">
+            ${waxOverlays}
+        </div>
+    `;
+
     // Start the timer
     timerInterval = setInterval(updateTimer, 1000);
 
@@ -242,6 +255,11 @@ function startWiggleEffect() {
         clearInterval(wiggleInterval);
         imageContainer.style.transform = 'translate(0, 0)'; // Reset position
     }, timeLeft * 1000); // Stop wiggle effect when time runs out
+}
+
+function stopWiggleEffect() {
+    const imageContainer = document.querySelector('.image-container');
+    imageContainer.style.transform = 'translate(0, 0)';
 }
 
 function stopAudio() {
@@ -331,8 +349,53 @@ function handleKeyPress(event) {
         case 'n':
             checkAnswer('No_Effusion');
             break;
+        case 'e':
+            extractWax();
+            break;
     }
     stopAudio(); 
+}
+
+function updateWaxToolsDisplay() {
+    let toolsDisplay = document.getElementById('wax-tools');
+    if (!toolsDisplay) {
+        toolsDisplay = document.createElement('div');
+        toolsDisplay.id = 'wax-tools';
+        document.getElementById('game-area').insertBefore(toolsDisplay, document.getElementById('image'));
+    }
+    toolsDisplay.innerHTML = `Wax Extraction Tools: ${waxExtractionTools}`;
+    toolsDisplay.style.display = isFellowMode ? 'block' : 'none';
+}
+
+function extractWax() {
+    if (waxExtractionTools > 0) {
+        waxExtractionTools--;
+        updateWaxToolsDisplay();
+        
+        // Remove wax overlays
+        let waxOverlays = document.querySelectorAll('.wax-overlay');
+        waxOverlays.forEach(overlay => overlay.remove());
+
+        // Remove blur from the image
+        let image = document.querySelector('.image-container img');
+        image.style.filter = 'none';
+
+        // Reset the timer
+        clearInterval(timerInterval);
+        timeLeft = isFellowMode ? 6 : 10;
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+
+        // Remove the extract wax button
+        let extractButton = document.getElementById('extract-wax');
+        if (extractButton) {
+            extractButton.remove();
+        }
+
+        // Stop wiggle effect and audio
+        stopWiggleEffect();
+        stopAudio();
+    }
 }
 
 // End the game
@@ -353,14 +416,17 @@ function endGame() {
     // Hide the win/lose covers in case they are visible
     document.getElementById('cover-win').style.display = 'none';
     document.getElementById('cover-lose').style.display = 'none';
+    stopAudio();
 }
 
 // Reset the game
 function resetGame() {
     score = 0;
-    lives = isFellowMode ? 3 : 5; // Reduce lives for fellow mode
+    lives = isFellowMode ? 3 : 5;
+    waxExtractionTools = isFellowMode ? 3 : 0; // Reset wax extraction tools
     document.getElementById('score').textContent = 'Score: 0';
     updateLives();
+    updateWaxToolsDisplay(); // Update wax tools display
     startNewRound();
     // Ensure all covers are hidden
     document.getElementById('cover').style.display = 'none';
