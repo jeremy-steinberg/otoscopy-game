@@ -423,7 +423,7 @@ body.fellow-mode #image {
 }
 
 .gpep-mode-image {
-    width: 100%;
+    width: 500px;
 }
 
 body:not(.fellow-mode) #fellow-mode-text {

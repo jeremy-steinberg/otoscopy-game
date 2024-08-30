@@ -222,11 +222,13 @@ function startNewRound() {
         // Randomly decide whether to apply the wiggle effect
         let shouldWiggle = Math.random() < 0.33; // 33% chance to wiggle
         if (shouldWiggle) {
-            startWiggleEffect();
-            // Play crying sound
-            let randomCryingSound = Math.floor(Math.random() * 6) + 1;
-            audio = new Audio(`audio/crying${randomCryingSound}.mp3`);
-            audio.play();
+            setTimeout(() => {
+                startWiggleEffect();
+                // Play crying sound
+                let randomCryingSound = Math.floor(Math.random() * 6) + 1;
+                audio = new Audio(`audio/crying${randomCryingSound}.mp3`);
+                audio.play();
+            }, 100); // Short delay to ensure DOM is ready
         }
     }
 
@@ -249,6 +251,11 @@ function startNewRound() {
 
 function startWiggleEffect() {
     const imageContainer = document.querySelector('.image-container');
+    if (!imageContainer) {
+        console.error('Image container not found');
+        return;
+    }
+    
     wiggleInterval = setInterval(() => {
         if (!isRunning) {
             stopWiggleEffect();
@@ -258,6 +265,9 @@ function startWiggleEffect() {
         let randomY = Math.random() * 4 - 2; // Random value between -2 and 2
         imageContainer.style.transform = `translate(${randomX}px, ${randomY}px)`;
     }, 100); // Wiggle every 100ms
+
+    // Log to confirm the function is running
+    console.log('Wiggle effect started');
 
     setTimeout(() => {
         stopWiggleEffect();
@@ -270,6 +280,7 @@ function stopWiggleEffect() {
     if (imageContainer) {
         imageContainer.style.transform = 'translate(0, 0)';
     }
+    console.log('Wiggle effect stopped'); // Log when the effect stops
 }
 
 function stopAudio() {
