@@ -7,6 +7,8 @@ let currentImage;
 let audio;
 let isMinimalist = false;
 let isFellowMode = false;
+let isRunning = false;
+let wiggleInterval;
 let waxExtractionTools = 3;
 let images = {
     AOM: [],
@@ -130,6 +132,7 @@ function showMenu() {
     document.getElementById('dx-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'none';
     stopAudio();
+    isRunning = false;
 }
 
 // Show the info screen
@@ -151,6 +154,7 @@ function showDx() {
 // Start the game
 function startGame() {
     lives = isFellowMode ? 3 : 5;
+    isRunning = true;
     document.getElementById('wax-button').style.display = isFellowMode ? 'block' : 'none';
     waxExtractionTools = isFellowMode ? 3 : 0; // Reset wax extraction tools
     document.getElementById('menu').style.display = 'none';
@@ -214,7 +218,7 @@ function startNewRound() {
     `;
 
     // Start wiggle effect after the image container is in the DOM
-    if (isFellowMode) {
+    if (isFellowMode && isRunning === true) {
         // Randomly decide whether to apply the wiggle effect
         let shouldWiggle = Math.random() < 0.33; // 33% chance to wiggle
         if (shouldWiggle) {
@@ -245,21 +249,27 @@ function startNewRound() {
 
 function startWiggleEffect() {
     const imageContainer = document.querySelector('.image-container');
-    let wiggleInterval = setInterval(() => {
+    wiggleInterval = setInterval(() => {
+        if (!isRunning) {
+            stopWiggleEffect();
+            return;
+        }
         let randomX = Math.random() * 4 - 2; // Random value between -2 and 2
         let randomY = Math.random() * 4 - 2; // Random value between -2 and 2
         imageContainer.style.transform = `translate(${randomX}px, ${randomY}px)`;
     }, 100); // Wiggle every 100ms
 
     setTimeout(() => {
-        clearInterval(wiggleInterval);
-        imageContainer.style.transform = 'translate(0, 0)'; // Reset position
+        stopWiggleEffect();
     }, timeLeft * 1000); // Stop wiggle effect when time runs out
 }
 
 function stopWiggleEffect() {
+    clearInterval(wiggleInterval);
     const imageContainer = document.querySelector('.image-container');
-    imageContainer.style.transform = 'translate(0, 0)';
+    if (imageContainer) {
+        imageContainer.style.transform = 'translate(0, 0)';
+    }
 }
 
 function stopAudio() {
@@ -401,6 +411,7 @@ function extractWax() {
 // End the game
 function endGame() {
     // Hide the image and show the game over screen
+    isRunning = false;
     document.getElementById('image').innerHTML = ''; // Clear the image
     document.getElementById('cover').style.display = 'flex';
     document.getElementById('cover').innerHTML = `
@@ -423,6 +434,7 @@ function endGame() {
 function resetGame() {
     score = 0;
     lives = isFellowMode ? 3 : 5;
+    isRunning = true;
     waxExtractionTools = isFellowMode ? 3 : 0; // Reset wax extraction tools
     document.getElementById('score').textContent = 'Score: 0';
     updateLives();
