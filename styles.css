@@ -317,58 +317,7 @@ footer {
    background-color: black;
 }
 
-@media (max-width: 600px) {
-    .container {
-        padding: 10px;
-    }
-    #game-area {
-        padding: 10px;
-    }
-    #image {
-        height: 200px;
-    }
-    .game-button {
-        font-size: 12px;
-        padding: 8px 16px;
-    }
-    #timer {
-        font-size: 16px;
-    }
-    .cover {
-        font-size: 16px;
-    }
-    .cover img {
-        max-width: 100px;
-    }
-    .cover button {
-        font-size: 12px;
-        padding: 8px 16px;
-    }
-    .done-icon {
-        width: 80px;
-        height: 80px;
-    }
-    #menu h1 {
-        font-size: 24px;
-        padding: 0 20px;
-    }
 
-    #menu button, #info-screen button, #dx-screen button {
-        font-size: 14px;
-        padding: 10px 20px;
-        width: 180px;
-    }
-    #info-screen h2, #dx-screen h2 {
-        font-size: 20px;
-    }
-    #info-screen p, #dx-screen p, #dx-screen ul {
-        font-size: 12px;
-    }
-    #info-screen{
-        justify-content:flex-start;
-        height: 100%;
-    }
-}
 
 
 .fellow-mode #menu {
@@ -380,7 +329,18 @@ footer {
     text-shadow: 4px 4px 0px #b8860b; /* Darker gold shadow */
 }
 
-.fellow-mode #menu button, #wax-button {
+.fellow-mode #menu button {
+    background-color: #4169e1; /* Royal blue for buttons */
+    border: 4px solid #1e90ff; /* Dodger blue border */
+    box-shadow: 4px 4px 0px #4682b4; /* Steel blue shadow */
+    color: #fff;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Press Start 2P', cursive;
+}
+
+#wax-button {
     background-color: #4169e1; /* Royal blue for buttons */
     border: 4px solid #1e90ff; /* Dodger blue border */
     box-shadow: 4px 4px 0px #4682b4; /* Steel blue shadow */
@@ -389,7 +349,9 @@ footer {
     cursor: pointer;
     transition: background-color 0.3s;
     font-family: 'Press Start 2P', cursive;
+
 }
+
 
 .fellow-mode #menu button:hover {
     background-color: #1e90ff; /* Dodger blue on hover */
@@ -414,7 +376,7 @@ body.fellow-mode #fellow-mode-text {
     content: 'Fellow Mode';
 }
 
-body.fellow-mode #image {
+.fellow-mode #image {
     width: 25%;
     background-color: black;
     border: 4px solid black;
@@ -521,8 +483,6 @@ body.minimalist {
     color:black;
 }
 
-
-
 .switch {
     position: relative;
     display: inline-block;
@@ -589,3 +549,63 @@ body.minimalist {
   #wax-tools{
     text-align: right;
   }
+
+  @media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    #game-area {
+        padding: 10px;
+    }
+    #image {
+        height: 200px;
+    }
+    .game-button {
+        font-size: 12px;
+        padding: 8px 16px;
+    }
+    #timer {
+        font-size: 16px;
+    }
+    .cover {
+        font-size: 16px;
+    }
+    .cover img {
+        max-width: 100px;
+    }
+    .cover button {
+        font-size: 12px;
+        padding: 8px 16px;
+    }
+    .done-icon {
+        width: 80px;
+        height: 80px;
+    }
+    #menu h1 {
+        font-size: 24px;
+        padding: 0 20px;
+    }
+
+    #menu button, #info-screen button, #dx-screen button {
+        font-size: 14px;
+        width: 250px;
+    }
+
+    #info-screen h2, #dx-screen h2 {
+        font-size: 20px;
+    }
+    #info-screen p, #dx-screen p, #dx-screen ul {
+        font-size: 12px;
+    }
+    #info-screen{
+        justify-content:flex-start;
+        height: 100%;
+    }
+    .fellow-mode #image {
+        width: 50%;
+        background-color: black;
+        border: 4px solid black;
+        margin: 80px auto;
+    
+    }
+}
