@@ -550,6 +550,11 @@ body.minimalist {
     text-align: right;
   }
 
+  #score-section{
+    display:flex;
+    justify-content:column;
+  }
+
   @media (max-width: 600px) {
     .container {
         padding: 10px;

@@ -1,6 +1,7 @@
 // Game variables
 let score = 0;
-let highScore = 0;
+let gpepHighScore = 0;
+let fellowHighScore = 0;
 let lives = 5;
 let timeLeft = 10;
 let timerInterval;
@@ -32,7 +33,7 @@ function initGame() {
 
     loadMinimalistState();
     loadFellowModeState();
-    loadHighScore();
+    loadHighScores();
 
     // Load image paths from images.json
     fetch('images.json')
@@ -95,6 +96,7 @@ function toggleFellowMode() {
     fellowModeText.textContent = isFellowMode ? "Fellow Mode Enabled" : "GPEP Mode Enabled";
     updateFellowMode();
     saveFellowModeState();
+    updateHighScoreDisplay();
 }
 
 
@@ -268,9 +270,6 @@ function startWiggleEffect() {
         imageContainer.style.transform = `translate(${randomX}px, ${randomY}px)`;
     }, 100); // Wiggle every 100ms
 
-    // Log to confirm the function is running
-    console.log('Wiggle effect started');
-
     setTimeout(() => {
         stopWiggleEffect();
     }, timeLeft * 1000); // Stop wiggle effect when time runs out
@@ -282,7 +281,6 @@ function stopWiggleEffect() {
     if (imageContainer) {
         imageContainer.style.transform = 'translate(0, 0)';
     }
-    console.log('Wiggle effect stopped'); // Log when the effect stops
 }
 
 function stopAudio() {
@@ -422,25 +420,45 @@ function extractWax() {
     }
 }
 
-// Load high score
-function loadHighScore() {
-    const storedHighScore = localStorage.getItem('highScore');
-    if (storedHighScore !== null) {
-        highScore = parseInt(storedHighScore, 10);
-        document.getElementById('high-score').textContent = `High Score: ${highScore}`;
+function loadHighScores() {
+    const storedGpepHighScore = localStorage.getItem('gpepHighScore');
+    const storedFellowHighScore = localStorage.getItem('fellowHighScore');
+    
+    if (storedGpepHighScore !== null) {
+        gpepHighScore = parseInt(storedGpepHighScore, 10);
     }
+    if (storedFellowHighScore !== null) {
+        fellowHighScore = parseInt(storedFellowHighScore, 10);
+    }
+    
+    updateHighScoreDisplay();
 }
+
+function updateHighScoreDisplay() {
+    const currentHighScore = isFellowMode ? fellowHighScore : gpepHighScore;
+    const modeText = isFellowMode ? "Fellow" : "GPEP";
+    document.getElementById('high-score').textContent = `${modeText} High Score: ${currentHighScore}`;
+}
+
 
 
 // High score system
 function updateHighScore() {
-    if (score > highScore) {
-        highScore = score;
-        localStorage.setItem('highScore', highScore);
-        document.getElementById('high-score').textContent = `High Score: ${highScore}`;
+    let currentHighScore = isFellowMode ? fellowHighScore : gpepHighScore;
+    
+    if (score > currentHighScore) {
+        if (isFellowMode) {
+            fellowHighScore = score;
+            localStorage.setItem('fellowHighScore', fellowHighScore);
+        } else {
+            gpepHighScore = score;
+            localStorage.setItem('gpepHighScore', gpepHighScore);
+        }
+        updateHighScoreDisplay();
         //showNotification('New High Score!');
     }
 }
+
 
 // End the game
 function endGame() {
