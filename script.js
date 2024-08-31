@@ -1,5 +1,6 @@
 // Game variables
 let score = 0;
+let highScore = 0;
 let lives = 5;
 let timeLeft = 10;
 let timerInterval;
@@ -31,6 +32,7 @@ function initGame() {
 
     loadMinimalistState();
     loadFellowModeState();
+    loadHighScore();
 
     // Load image paths from images.json
     fetch('images.json')
@@ -320,6 +322,7 @@ function checkAnswer(answer) {
     } else if (answer === currentImage.category) {
         let pointsAwarded = isFellowMode ? Math.min(timeLeft, 5) : 10;
         score += pointsAwarded;
+        updateHighScore();
         document.getElementById('score').textContent = `Score: ${score}`;
         document.getElementById('cover-win').style.display = 'flex';
         document.getElementById('cover-win').innerHTML = `
@@ -416,6 +419,26 @@ function extractWax() {
         // Stop wiggle effect and audio
         stopWiggleEffect();
         stopAudio();
+    }
+}
+
+// Load high score
+function loadHighScore() {
+    const storedHighScore = localStorage.getItem('highScore');
+    if (storedHighScore !== null) {
+        highScore = parseInt(storedHighScore, 10);
+        document.getElementById('high-score').textContent = `High Score: ${highScore}`;
+    }
+}
+
+
+// High score system
+function updateHighScore() {
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highScore', highScore);
+        document.getElementById('high-score').textContent = `High Score: ${highScore}`;
+        //showNotification('New High Score!');
     }
 }
 
