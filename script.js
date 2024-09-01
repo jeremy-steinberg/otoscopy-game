@@ -5,12 +5,14 @@ let gpepHighScore = 0;
 let fellowHighScore = 0;
 let lives = 5;
 let timeLeft = 10;
+let questionsAnswered = 0;
 let timerInterval;
 let currentImage;
 let audio;
 let isMinimalist = false;
 let isFellowMode = false;
 let isRunning = false;
+let thresholdReached = false;
 let wiggleInterval;
 let waxExtractionTools = 3;
 let images = {
@@ -159,7 +161,9 @@ function showDx() {
 // Start the game
 function startGame() {
     lives = isFellowMode ? 3 : 5;
+    questionsAnswered = 0;
     isRunning = true;
+    thresholdReached = false;
     document.getElementById('wax-button').style.display = isFellowMode ? 'block' : 'none';
     waxExtractionTools = isFellowMode ? 3 : 0; // Reset wax extraction tools
     document.getElementById('menu').style.display = 'none';
@@ -306,6 +310,8 @@ function updateTimer() {
 function checkAnswer(answer) {
     clearInterval(timerInterval);
     stopAudio();
+    questionsAnswered++;
+    console.log(questionsAnswered);
 
     if (answer === 'timeout') {
         lives--;
@@ -318,21 +324,32 @@ function checkAnswer(answer) {
             <p>Too slow, patient moved!<br><br> Correct answer: ${displayAnswer}</p>
         </div>
     `;
-    updateStreak(false); // Reset streak when timeout occurs
+        updateStreak(false); // Reset streak when timeout occurs
     } else if (answer === currentImage.category) {
         let pointsAwarded = isFellowMode ? Math.min(timeLeft, 5) : 10;
         score += pointsAwarded;
         updateStreak(answer === currentImage.category);
         updateHighScore();
         document.getElementById('score').textContent = `Score: ${score}`;
-        document.getElementById('cover-win').style.display = 'flex';
-        document.getElementById('cover-win').innerHTML = `
-        <div>
-            Ka Pai!<br>
-            <img src="img/correct.png" alt="Correct">
-            <p>+${pointsAwarded} points</p>
-        </div>
-    `;
+        
+        // Check if the player has reached the score threshold for the first time
+        if (!thresholdReached && ((isFellowMode && score >= 500) || (!isFellowMode && score >= 1000))) {
+            thresholdReached = true;
+            showGameCompleteOption();
+            return;
+        } else {
+            document.getElementById('cover-win').style.display = 'flex';
+            document.getElementById('cover-win').innerHTML = `
+            <div>
+                Ka Pai!<br>
+                <img src="img/correct.png" alt="Correct">
+                <p>+${pointsAwarded} points</p>
+            </div>
+            `;
+            if (lives > 0) {
+                setTimeout(startNewRound, isFellowMode ? 1500 : 2000); // Reduce delay for fellow mode
+            }
+        }
     } else {
         lives--;
         updateLives();
@@ -344,7 +361,7 @@ function checkAnswer(answer) {
             <p>Correct answer: ${displayAnswer}</p>
         </div>
     `;
-    updateStreak(false); // Reset streak when timeout occurs
+        updateStreak(false); // Reset streak when timeout occurs
     }
 
     if (lives > 0) {
@@ -353,6 +370,8 @@ function checkAnswer(answer) {
         endGame();
     }
 }
+
+
 
 // Update lives display
 function updateLives() {
@@ -472,14 +491,33 @@ function updateStreak(correct) {
             updateWaxToolsDisplay();
         }
     } else {
-        console.log("wrong");
         streak = 0;
     }
     document.getElementById('streak').textContent = `Streak: ${streak}`;
 }
 
-// End the game
+function calculateAccuracy(isFellowMode, score, lives, questionsAnswered) {
+    let accuracy = 0;
+
+    if (isFellowMode) {
+        // Fellow mode accuracy calculation
+        const initialLives = 3;
+        const incorrectAnswers = initialLives - lives;
+        const correctAnswers = questionsAnswered - incorrectAnswers;
+        accuracy = (correctAnswers / questionsAnswered) * 100;
+    } else {
+        // GPEP mode accuracy calculation
+        const correctAnswers = score / 10;
+        accuracy = (correctAnswers / questionsAnswered) * 100;
+    }
+
+    return accuracy.toFixed(2); // Return accuracy with two decimal places
+}
+
 function endGame() {
+    // Calculate accuracy using the helper function
+    const accuracy = calculateAccuracy(isFellowMode, score, lives, questionsAnswered);
+
     // Hide the image and show the game over screen
     isRunning = false;
     document.getElementById('image').innerHTML = ''; // Clear the image
@@ -489,6 +527,7 @@ function endGame() {
             <h2>Game Over</h2>
             <img src="img/done.png" alt="Life" class="done-icon">
             <p>Your final score: ${score}</p>
+            <p>Your accuracy was ${accuracy}%.</p>
             <button onclick="resetGame()">Play Again</button>
             <button onclick="showMenu()">Main Menu</button>
         </div>
@@ -500,17 +539,43 @@ function endGame() {
     stopAudio();
 }
 
-// Reset the game
+
+function showGameCompleteOption() {
+    // Calculate accuracy using the helper function
+    const accuracy = calculateAccuracy(isFellowMode, score, lives, questionsAnswered);
+
+    document.getElementById('cover').style.display = 'flex';
+    document.getElementById('cover').innerHTML = `
+        <div>
+            <h2>Congratulations!</h2>
+            <p>You've completed ${isFellowMode ? 'Fellow' : 'GPEP'} mode with a score of ${score} and ${lives} lives left!</p>
+            <p>Your accuracy was ${accuracy}%.</p>
+            <p>Do you want to continue or exit?</p>
+            <button onclick="continueGame()">Continue</button>
+            <button onclick="showMenu()">Exit to Menu</button>
+        </div>
+    `;
+}
+
+
+// Add a new function to continue the game
+function continueGame() {
+    document.getElementById('cover').style.display = 'none';
+    startNewRound();
+}
+
+// Update the resetGame function
 function resetGame() {
     score = 0;
+    questionsAnswered = 0;
     lives = isFellowMode ? 3 : 5;
     isRunning = true;
-    waxExtractionTools = isFellowMode ? 3 : 0; // Reset wax extraction tools
+    waxExtractionTools = isFellowMode ? 3 : 0;
+    thresholdReached = false;
     document.getElementById('score').textContent = 'Score: 0';
     updateLives();
-    updateWaxToolsDisplay(); // Update wax tools display
+    updateWaxToolsDisplay();
     startNewRound();
-    // Ensure all covers are hidden
     document.getElementById('cover').style.display = 'none';
     document.getElementById('cover-win').style.display = 'none';
     document.getElementById('cover-lose').style.display = 'none';
