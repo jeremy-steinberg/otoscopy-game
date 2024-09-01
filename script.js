@@ -8,18 +8,26 @@ let timeLeft = 10;
 let questionsAnswered = 0;
 let timerInterval;
 let currentImage;
-let audio;
 let isMinimalist = false;
 let isFellowMode = false;
 let isRunning = false;
 let thresholdReached = false;
 let wiggleInterval;
 let waxExtractionTools = 3;
+let audio = new Audio();
 let images = {
     AOM: [],
     OME: [],
     No_Effusion: []
 };
+
+function preloadAudio() {
+    for (let i = 1; i <= 6; i++) {
+        let audio = new Audio(`audio/crying${i}.mp3`);
+        audio.preload = 'auto';
+    }
+}
+
 
 // Initialize the game
 function initGame() {
@@ -34,6 +42,7 @@ function initGame() {
     document.getElementById('toggle-fellow').addEventListener('change', toggleFellowMode);
     document.getElementById('wax-button').addEventListener('click', extractWax);
 
+    preloadAudio();
     loadMinimalistState();
     loadFellowModeState();
     loadHighScores();
@@ -233,11 +242,8 @@ function startNewRound() {
         if (shouldWiggle) {
             setTimeout(() => {
                 startWiggleEffect();
-                // Play crying sound
-                let randomCryingSound = Math.floor(Math.random() * 6) + 1;
-                audio = new Audio(`audio/crying${randomCryingSound}.mp3`);
-                audio.play();
-            }, 100); // Short delay to ensure DOM is ready
+                playAudio();
+            }, 200); // Short delay to ensure DOM is ready
         }
     }
 
@@ -256,6 +262,17 @@ function startNewRound() {
     document.getElementById('cover').style.display = 'none';
     document.getElementById('cover-win').style.display = 'none';
     document.getElementById('cover-lose').style.display = 'none';
+}
+
+function playAudio() {
+    if (audio.currentTime > 0) {
+        console.log("Audio is already playing. Stopping current audio.");
+        audio.pause();
+        audio.currentTime = 0;
+    }
+    let randomCryingSound = Math.floor(Math.random() * 6) + 1;
+    audio.src = `/audio/crying${randomCryingSound}.mp3`;
+    audio.play().catch(e => console.error("Error playing audio:", e));
 }
 
 function startWiggleEffect() {
@@ -289,12 +306,13 @@ function stopWiggleEffect() {
 }
 
 function stopAudio() {
-    if (audio && !audio.paused) {
+    if (audio) {
         audio.pause();
         audio.currentTime = 0;
+    } else {
+        console.log('No audio to stop');
     }
 }
-
 
 // Update the timer
 function updateTimer() {
@@ -311,7 +329,6 @@ function checkAnswer(answer) {
     clearInterval(timerInterval);
     stopAudio();
     questionsAnswered++;
-    console.log(questionsAnswered);
 
     if (answer === 'timeout') {
         lives--;
@@ -523,7 +540,7 @@ function endGame() {
     document.getElementById('image').innerHTML = ''; // Clear the image
     document.getElementById('cover').style.display = 'flex';
     document.getElementById('cover').innerHTML = `
-        <div>
+        <div id="game-over">
             <h2>Game Over</h2>
             <img src="img/done.png" alt="Life" class="done-icon">
             <p>Your final score: ${score}</p>
