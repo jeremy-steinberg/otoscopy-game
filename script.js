@@ -1,5 +1,6 @@
 // Game variables
 let score = 0;
+let streak = 0;
 let gpepHighScore = 0;
 let fellowHighScore = 0;
 let lives = 5;
@@ -317,9 +318,11 @@ function checkAnswer(answer) {
             <p>Too slow, patient moved!<br><br> Correct answer: ${displayAnswer}</p>
         </div>
     `;
+    updateStreak(false); // Reset streak when timeout occurs
     } else if (answer === currentImage.category) {
         let pointsAwarded = isFellowMode ? Math.min(timeLeft, 5) : 10;
         score += pointsAwarded;
+        updateStreak(answer === currentImage.category);
         updateHighScore();
         document.getElementById('score').textContent = `Score: ${score}`;
         document.getElementById('cover-win').style.display = 'flex';
@@ -341,6 +344,7 @@ function checkAnswer(answer) {
             <p>Correct answer: ${displayAnswer}</p>
         </div>
     `;
+    updateStreak(false); // Reset streak when timeout occurs
     }
 
     if (lives > 0) {
@@ -459,6 +463,20 @@ function updateHighScore() {
     }
 }
 
+// Streak system
+function updateStreak(correct) {
+    if (correct) {
+        streak++;
+        if (streak > 0 && streak % 5 === 0) {
+            waxExtractionTools += 1;
+            updateWaxToolsDisplay();
+        }
+    } else {
+        console.log("wrong");
+        streak = 0;
+    }
+    document.getElementById('streak').textContent = `Streak: ${streak}`;
+}
 
 // End the game
 function endGame() {
@@ -496,6 +514,8 @@ function resetGame() {
     document.getElementById('cover').style.display = 'none';
     document.getElementById('cover-win').style.display = 'none';
     document.getElementById('cover-lose').style.display = 'none';
+    streak = 0;
+    document.getElementById('streak').textContent = 'Streak: 0';
 }
 
 // Initialize the game when the page loads

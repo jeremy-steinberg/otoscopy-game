@@ -130,6 +130,30 @@ body {
     border-bottom: 4px solid #cd853f;
 }
 
+#top-bar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#top-bar span {
+    margin: 5px 10px;
+    font-size: 14px;
+}
+
+#lives {
+    display: flex;
+    align-items: center;
+}
+
+.life-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    image-rendering: pixelated;
+}
+
 #game-area {
     background-color: #000;
     border: 4px solid #fff;
@@ -439,7 +463,7 @@ body.minimalist {
     border: 1px solid #000000;
     box-shadow: none;
     font-family: Arial, sans-serif!important;
-    font-size:30px;
+    font-size:24px;
 }
 
 .minimalist #menu button:hover,
@@ -612,5 +636,19 @@ body.minimalist {
         border: 4px solid black;
         margin: 80px auto;
     
+    }
+    #top-bar .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #top-bar span {
+        width: 100%;
+        text-align: left;
+        margin: 2px 0;
+    }
+
+    #lives {
+        justify-content: flex-start;
     }
 }
