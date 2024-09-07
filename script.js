@@ -211,7 +211,7 @@ function startNewRound() {
         blurStyle = `filter: blur(${randomBlur}px);`;
 
         // Determine whether to show wax
-        let showWax = Math.random() < 1; // 100% chance to show wax
+        let showWax = Math.random() < 0.4; // 40% chance to show wax
         if (showWax) {
             let waxCount = Math.floor(Math.random() * 4) + 3; // Random number of wax pieces (3 to 7)
             for (let i = 0; i < waxCount; i++) {
@@ -246,14 +246,6 @@ function startNewRound() {
             }, 200); // Short delay to ensure DOM is ready
         }
     }
-
-    // Display the image with or without blur and with wax overlays (if applicable)
-    document.getElementById('image').innerHTML = `
-        <div class="image-container ${imageContainerClass}" style="position: relative; overflow: hidden;">
-            <img src="${currentImage.src}" alt="Otoscopy Image" style="${blurStyle}">
-            ${waxOverlays}
-        </div>
-    `;
 
     // Start the timer
     timerInterval = setInterval(updateTimer, 1000);
